@@ -9,5 +9,5 @@ import com.example.soapwebservice.entities.Country;
 
 @Repository("countryRepository")
 public interface ICountryRepository extends JpaRepository<Country, Serializable> {
-
+	public abstract Country findById(int id);
 }

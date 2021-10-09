@@ -8,6 +8,8 @@ public interface ICountryService {
 	
 	public List<Country> getAll();
 	
+	public Country findById(int id);
+	
 	public Country insertOrUpdate(Country Country);
 	
 	public boolean remove(int id);

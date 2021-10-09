@@ -15,6 +15,8 @@ import io.spring.guides.gs_producing_web_service.CreateCountryResponse;
 import io.spring.guides.gs_producing_web_service.DeleteCountryRequest;
 import io.spring.guides.gs_producing_web_service.DeleteCountryResponse;
 import io.spring.guides.gs_producing_web_service.GetAllCountriesResponse;
+import io.spring.guides.gs_producing_web_service.GetCountryRequest;
+import io.spring.guides.gs_producing_web_service.GetCountryResponse;
 import io.spring.guides.gs_producing_web_service.ResponseStatus;
 import io.spring.guides.gs_producing_web_service.UpdateCountryRequest;
 import io.spring.guides.gs_producing_web_service.UpdateCountryResponse;
@@ -42,9 +44,9 @@ public class CountryEndpoint {
 		response.setCountry(country);
 
 		responseStatus.setCode("0");
-		responseStatus.setMessage("Created succesfully.");
+		responseStatus.setMessage("Created successfully.");
 
-		response.setReponseStatus(responseStatus);
+		response.setResponseStatus(responseStatus);
 
 		return response;
 	}
@@ -56,11 +58,11 @@ public class CountryEndpoint {
 		UpdateCountryResponse response = new UpdateCountryResponse();
 		ResponseStatus responseStatus = new ResponseStatus();
 						
-		entityToModel(countryService.insertOrUpdate(new com.example.soapwebservice.entities.Country(request.getCountry().getName(), request.getCountry().getPopulation(), request.getCountry().getCapital(),
+		entityToModel(countryService.insertOrUpdate(new com.example.soapwebservice.entities.Country(request.getCountry().getId(), request.getCountry().getName(), request.getCountry().getPopulation(), request.getCountry().getCapital(),
 				request.getCountry().getCurrency())));
 
 		responseStatus.setCode("0");
-		responseStatus.setMessage("Updated succesfully.");
+		responseStatus.setMessage("Updated successfully.");
 		
 		response.setResponseStatus(responseStatus);
 
@@ -76,7 +78,7 @@ public class CountryEndpoint {
 
 		if (countryService.remove((int) request.getId())) {
 			responseStatus.setCode("0");
-			responseStatus.setMessage("Deleted succesfully.");
+			responseStatus.setMessage("Deleted successfully.");
 		} else {
 			responseStatus.setCode("100");
 			responseStatus.setMessage("Could not be deleted.");
@@ -95,6 +97,21 @@ public class CountryEndpoint {
 
 		for (com.example.soapwebservice.entities.Country c : countryService.getAll()) {
 			response.getCountry().add(entityToModel(c));
+		}
+
+		return response;
+	}
+	
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
+	@ResponsePayload
+	public GetCountryResponse getCountryRequest(@RequestPayload GetCountryRequest request) {
+
+		GetCountryResponse response = new GetCountryResponse();
+		
+		com.example.soapwebservice.entities.Country country = countryService.findById(request.getId());
+				
+		if(country != null) {
+			response.setCountry(entityToModel(country));
 		}
 
 		return response;

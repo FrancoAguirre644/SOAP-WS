@@ -36,4 +36,9 @@ public class CountryService implements ICountryService {
 			return false;
 		}
 	}
+
+	@Override
+	public Country findById(int id) {
+		return countryRepository.findById(id);
+	}
 }
